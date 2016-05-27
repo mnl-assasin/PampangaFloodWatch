@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/map"
+            android:checked="true"
+            android:title="@string/drawer_map" />
+
+        <item
+            android:id="@+id/municipalities"
+            android:checked="false"
+            android:title="@string/drawer_municipalities" />
+
+        <item
+            android:id="@+id/floodHistory"
+            android:checked="false"
+            android:title="@string/drawer_floodhistory" />
+
+        <item
+            android:id="@+id/about"
+            android:checked="false"
+            android:title="@string/drawer_about" />
+
+        <item
+            android:id="@+id/help"
+            android:checked="false"
+            android:title="@string/drawer_help" />
+    </group>
+</menu>
