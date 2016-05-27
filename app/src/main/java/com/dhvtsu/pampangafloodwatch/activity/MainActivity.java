@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+//        super.onBackPressed();
 
         DialogBuilder.dialogBuilder(MainActivity.this, getString(R.string.app_name),
                 getString(R.string.app_exit), false, getString(R.string.ok), new DialogInterface.OnClickListener() {
