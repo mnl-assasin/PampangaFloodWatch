@@ -14,11 +14,4 @@ public class Flood {
     public static final int LOW = 1;
     public static final int NO_WATER = 0;
 
-    public static final String MUN_BACOLOR = "Bacolor";
-    public static final String MUN_FLORIDA = "Floridablanca";
-    public static final String MUN_LUBAO = "Lubao";
-
-    public static final int BACOLOR = 0;
-    public static final int FLORIDA = 1;
-    public static final int LUBAO = 2;
 }

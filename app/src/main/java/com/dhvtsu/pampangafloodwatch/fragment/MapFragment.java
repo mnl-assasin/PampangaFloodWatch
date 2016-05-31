@@ -23,8 +23,11 @@ import com.dhvtsu.pampangafloodwatch.R;
 import com.dhvtsu.pampangafloodwatch.builder.DialogBuilder;
 import com.dhvtsu.pampangafloodwatch.data.EZSharedPreferences;
 import com.dhvtsu.pampangafloodwatch.data.Flood;
+import com.dhvtsu.pampangafloodwatch.data.Municipality;
 import com.dhvtsu.pampangafloodwatch.service.SmsReceiver;
 import com.dhvtsu.pampangafloodwatch.utils.LogUtil;
+
+import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -74,7 +77,24 @@ public class MapFragment extends Fragment {
         txtMap.setText("Value " + mapCombination[0] + " : " + mapCombination[1] + " : " + mapCombination[2]);
 //        txtMap.setText("87");
         initSMSReceiver();
+        testing();
+    }
 
+    public void testing() {
+        ArrayList<Object> fields = new ArrayList<>();
+
+        fields.add("one");
+        fields.add("two");
+        fields.add("three");
+        String tblFields = "(";
+        for (int ctr = 0; ctr < fields.size(); ctr++) {
+            if (fields.get(ctr) instanceof String) {
+                tblFields += fields.get(ctr) + " varchar";
+            }
+            tblFields += ", ";
+        }
+        tblFields = tblFields.substring(0, tblFields.length() - 2) + ")";
+        LogUtil.d(TAG, "DB FIELD " + tblFields);
     }
 
     public void initSMSReceiver() {
@@ -108,12 +128,12 @@ public class MapFragment extends Fragment {
         if (sender.equals(SMS_GATEWAY)) {
             LogUtil.d(TAG, "Message: " + message);
 
-            if (message.contains(Flood.MUN_BACOLOR))
-                area = Flood.BACOLOR;
-            else if (message.contains(Flood.MUN_FLORIDA))
-                area = Flood.FLORIDA;
-            else if (message.contains(Flood.MUN_LUBAO))
-                area = Flood.LUBAO;
+            if (message.contains(Municipality.MUN_BACOLOR))
+                area = Municipality.BACOLOR;
+            else if (message.contains(Municipality.MUN_FLORIDA))
+                area = Municipality.FLORIDA;
+            else if (message.contains(Municipality.MUN_LUBAO))
+                area = Municipality.LUBAO;
             else
                 area = -1;
 
