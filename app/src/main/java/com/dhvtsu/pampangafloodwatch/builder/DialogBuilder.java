@@ -3,6 +3,7 @@ package com.dhvtsu.pampangafloodwatch.builder;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.View;
 
 import com.dhvtsu.pampangafloodwatch.R;
 
@@ -34,14 +35,14 @@ public class DialogBuilder {
     }
 
     public static void dialogBuilder(final Context ctx, String title, String message, boolean cancelable, String pButton,
-                                     DialogInterface.OnClickListener positiveListener, String nButton,
-                                     DialogInterface.OnClickListener negativeListener) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                                     DialogInterface.OnClickListener pListener, String nButton,
+                                     DialogInterface.OnClickListener nListener) {
+        AlertDialog.Builder builder = getDialogBuilder(ctx);
         builder.setTitle(title);
         builder.setMessage(message);
         builder.setCancelable(cancelable);
-        builder.setPositiveButton(pButton, positiveListener);
-        builder.setNegativeButton(nButton, negativeListener);
+        builder.setPositiveButton(pButton, pListener);
+        builder.setNegativeButton(nButton, nListener);
         builder.show();
     }
 
@@ -50,7 +51,20 @@ public class DialogBuilder {
         builder.setMessage(message);
         builder.setPositiveButton(ctx.getString(R.string.done), listener);
         builder.show();
+    }
 
+    public static void dialogBuilder(final Context ctx, String title, View v, String pButton, DialogInterface.OnClickListener pListener, String nButton, DialogInterface.OnClickListener nListener) {
+        AlertDialog.Builder builder = getDialogBuilder(ctx);
+        builder.setTitle(title);
+        builder.setView(v);
+        builder.setCancelable(false);
+        builder.setPositiveButton(pButton, pListener);
+        builder.setNegativeButton(nButton, nListener);
+        builder.show();
+    }
+
+    public static AlertDialog.Builder getDialogBuilder(Context ctx) {
+        return new AlertDialog.Builder(ctx);
     }
 
 }

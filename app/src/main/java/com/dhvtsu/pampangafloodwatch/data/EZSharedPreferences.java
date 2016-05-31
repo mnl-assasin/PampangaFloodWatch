@@ -10,7 +10,7 @@ public class EZSharedPreferences {
 
     private static String TAG = EZSharedPreferences.class.getSimpleName();
 
-    private static final String USER_PREFERENCES = "RigPirate_Prefs";
+    private static final String USER_PREFERENCES = "PFW_Preferences";
 
     public static final String KEY_LOGIN = "Login";
     public static final String KEY_GATEWAY = "SmsGateway";
@@ -27,7 +27,7 @@ public class EZSharedPreferences {
     }
 
     public static String getGateway(Context ctx) {
-        return getSharedPref(ctx).getString(KEY_GATEWAY, null);
+        return getSharedPref(ctx).getString(KEY_GATEWAY, "");
     }
 
     // = = = = = = = = = = = = = = = = = = = = = = =
