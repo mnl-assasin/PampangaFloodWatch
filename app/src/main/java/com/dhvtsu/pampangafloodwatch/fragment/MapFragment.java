@@ -36,17 +36,21 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class MapFragment extends Fragment {
-    private static final String TAG = MapFragment.class.getSimpleName();
+
 
     @Bind(R.id.ivPampanga)
     ImageView ivPampanga;
     @Bind(R.id.txtMap)
     TextView txtMap;
 
+
+    private static final String TAG = MapFragment.class.getSimpleName();
+    private String SMS_GATEWAY;
+
     private Context ctx;
 
     private BroadcastReceiver mReceiver;
-    private String SMS_GATEWAY;
+
 
     private int mapCombination[] = {0, 0, 0};
 
@@ -180,8 +184,8 @@ public class MapFragment extends Fragment {
         return super.onOptionsItemSelected(item);
 
 
-    }
 
+    }
     public void setGateway() {
         final EditText etGateway = new EditText(getActivity());
         etGateway.setInputType(InputType.TYPE_CLASS_PHONE);
