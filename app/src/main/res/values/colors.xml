@@ -15,4 +15,7 @@
     <color name="colorControlActivated">#5D4037</color>
 
     <color name="colorTesting">#409521</color>
+    <color name="floodHigh">#f00</color>
+    <color name="floodMed">#ffa500</color>
+    <color name="floodLow">#ff0</color>
 </resources>

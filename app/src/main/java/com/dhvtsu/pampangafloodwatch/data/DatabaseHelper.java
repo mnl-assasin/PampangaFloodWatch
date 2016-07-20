@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String DB_NAME = "PFW_DB";
-    public static final int DB_VERSION = 1;
+    public static final int DB_VERSION = 2;
 
     private static DatabaseHelper mInstance = null;
 
@@ -31,24 +31,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        createMunicipalities(db);
+//        createMunicipalities(db);
+        createFloodHistory(db);
     }
 
-    private void createMunicipalities(SQLiteDatabase db) {
-
-        ArrayList<Object> fields = new ArrayList<>();
-        fields.add(Municipality.ID);
-        fields.add(Municipality.NAME);
-        createTable(db, Municipality.TBL_NAME, fields);
-
-        db.execSQL("INSERT INTO " + Municipality.TBL_NAME + "(" + Municipality.ID + "," + Municipality.NAME + ") VALUES (" + Municipality.BACOLOR + ",'" + Municipality.MUN_BACOLOR + "')");
-        db.execSQL("INSERT INTO " + Municipality.TBL_NAME + "(" + Municipality.ID + "," + Municipality.NAME + ") VALUES (" + Municipality.FLORIDA + ",'" + Municipality.MUN_FLORIDA + "')");
-        db.execSQL("INSERT INTO " + Municipality.TBL_NAME + "(" + Municipality.ID + "," + Municipality.NAME + ") VALUES (" + Municipality.LUBAO + ",'" + Municipality.MUN_LUBAO + "')");
+    private void createFloodHistory(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_history(id integer primary key area integer, level integer, timestamp varchar, datestamp)");
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        dropTable(db, Municipality.TBL_NAME);
+        dropTable(db, "tbl_history");
         onCreate(db);
     }
 
