@@ -36,7 +36,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     private void createFloodHistory(SQLiteDatabase db) {
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_history(id integer primary key area integer, level integer, timestamp varchar, datestamp)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbl_history(id integer primary key, area integer, level integer, timestamp varchar)");
     }
 
 

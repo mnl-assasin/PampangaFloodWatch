@@ -14,6 +14,9 @@ public class EZSharedPreferences {
 
     public static final String KEY_LOGIN = "Login";
     public static final String KEY_GATEWAY = "SmsGateway";
+    public static final String KEY_LAST_BACOLOR = "last bacolor";
+    public static final String KEY_LAST_FLORIDA = "last florida";
+    public static final String KEY_LAST_LUBAO = "last lubao";
 
     public static SharedPreferences getSharedPref(Context ctx) {
         return ctx.getSharedPreferences(USER_PREFERENCES, Context.MODE_PRIVATE);
@@ -30,6 +33,15 @@ public class EZSharedPreferences {
         return getSharedPref(ctx).getString(KEY_GATEWAY, "");
     }
 
+    public static int[] getWaterLevel(Context ctx) {
+        int map[] = new int[3];
+
+        map[0] = getSharedPref(ctx).getInt(KEY_LAST_BACOLOR, 0);
+        map[1] = getSharedPref(ctx).getInt(KEY_LAST_FLORIDA, 0);
+        map[2] = getSharedPref(ctx).getInt(KEY_LAST_LUBAO, 0);
+        return map;
+    }
+
     // = = = = = = = = = = = = = = = = = = = = = = =
     // SETTER
     // = = = = = = = = = = = = = = = = = = = = = = =
@@ -43,6 +55,15 @@ public class EZSharedPreferences {
         SharedPreferences.Editor editor = getSharedPref(ctx).edit();
         editor.putString
                 (KEY_GATEWAY, s);
+        editor.commit();
+    }
+
+    public static void setWaterLevel(Context ctx, int level[]) {
+        SharedPreferences.Editor editor = getSharedPref(ctx).edit();
+        editor.putInt(KEY_LAST_BACOLOR, level[0]);
+        editor.putInt(KEY_LAST_FLORIDA, level[1]);
+        editor.putInt(KEY_LAST_LUBAO, level[2]);
+
         editor.commit();
     }
 }

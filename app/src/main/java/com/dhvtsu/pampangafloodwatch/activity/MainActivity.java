@@ -15,7 +15,9 @@ import android.widget.TextView;
 
 import com.dhvtsu.pampangafloodwatch.R;
 import com.dhvtsu.pampangafloodwatch.builder.DialogBuilder;
+import com.dhvtsu.pampangafloodwatch.fragment.HistoryFragment;
 import com.dhvtsu.pampangafloodwatch.fragment.MapFragment;
+import com.dhvtsu.pampangafloodwatch.fragment.MunicipalityFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -116,8 +118,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 title = getString(R.string.drawer_map);
                 break;
             case R.id.municipalities:
+                mFragment = new MunicipalityFragment();
                 break;
             case R.id.floodHistory:
+                mFragment = new HistoryFragment();
                 break;
             case R.id.about:
                 break;

@@ -2,10 +2,13 @@ package com.dhvtsu.pampangafloodwatch.fragment;
 
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,6 +25,7 @@ import android.widget.TextView;
 
 import com.dhvtsu.pampangafloodwatch.R;
 import com.dhvtsu.pampangafloodwatch.builder.DialogBuilder;
+import com.dhvtsu.pampangafloodwatch.data.DatabaseHelper;
 import com.dhvtsu.pampangafloodwatch.data.EZSharedPreferences;
 import com.dhvtsu.pampangafloodwatch.data.Flood;
 import com.dhvtsu.pampangafloodwatch.data.Municipality;
@@ -31,6 +35,7 @@ import com.dhvtsu.pampangafloodwatch.widgets.TouchImageView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -40,6 +45,7 @@ import butterknife.ButterKnife;
  */
 public class MapFragment extends Fragment {
     private static final String TAG = MapFragment.class.getSimpleName();
+    private Context ctx = this.getActivity();
 
     @Bind(R.id.txtMap)
     TextView txtMap;
@@ -54,8 +60,12 @@ public class MapFragment extends Fragment {
     @Bind(R.id.tvLubaoWL)
     TextView tvLubaoWL;
 
+    private DatabaseHelper dbHelper;
+    private SQLiteDatabase db;
+    private ContentValues cv;
+
     private String SMS_GATEWAY;
-    private Context ctx;
+
     private BroadcastReceiver mReceiver;
 
     private int mapDrawable[][][] = {
@@ -107,15 +117,22 @@ public class MapFragment extends Fragment {
 
     private void initData() {
         setHasOptionsMenu(true);
+        dbHelper = DatabaseHelper.getInstance(getActivity());
+        initGateway();
+        initSMSReceiver();
+        initMap();
+        readDB();
+//        updateMap(1, 3);
+//        updateMap(0, 1);
+//        updateMap(2, 2);
+    }
 
+    private void initGateway() {
         SMS_GATEWAY = EZSharedPreferences.getGateway(getActivity());
         tvGateway.setText(SMS_GATEWAY);
-        if (SMS_GATEWAY.equals("")) {
-            LogUtil.d(TAG, "SMS Gateway not set!");
+        if (SMS_GATEWAY.equals(""))
             setGateway();
-        }
-        initSMSReceiver();
-        getCurrentTime();
+
 
     }
 
@@ -135,6 +152,14 @@ public class MapFragment extends Fragment {
         };
 
         getActivity().registerReceiver(mReceiver, intentFilter);
+    }
+
+    public void initMap() {
+        mapCombination = EZSharedPreferences.getWaterLevel(getActivity());
+        for (int ctr = 0; ctr < mapCombination.length; ctr++) {
+            Log.d(TAG, "Value: " + mapCombination[ctr]);
+            updateMap(ctr, mapCombination[ctr]);
+        }
     }
 
     @Override
@@ -173,6 +198,40 @@ public class MapFragment extends Fragment {
 
             if (area != -1 && waterLevel != -1) {
                 updateMap(area, waterLevel);
+                addToHistory(area, waterLevel);
+            }
+        }
+    }
+
+    private void addToHistory(int area, int waterLevel) {
+
+        String time = getCurrentTime();
+        db = dbHelper.getWritableDatabase();
+        cv = new ContentValues();
+        cv.put("area", area);
+        cv.put("level", waterLevel);
+        cv.put("timestamp", time);
+        db.insert("tbl_history", null, cv);
+        readDB();
+    }
+
+    private void readDB() {
+
+        db = dbHelper.getReadableDatabase();
+
+        Cursor cursor = db.query("tbl_history", null, "area = ?", new String[]{String.valueOf(1)}, null, null, null);
+//        Cursor cursor = db.query("tbl_history", null, null, null, null, null, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                int area;
+                int level;
+                String time;
+
+                area = cursor.getInt(1);
+                level = cursor.getInt(2);
+                time = cursor.getString(3);
+
+                Log.d(TAG, area + " " + level + " " + time);
             }
         }
     }
@@ -210,9 +269,11 @@ public class MapFragment extends Fragment {
                 tvLubaoWL.setText(floodStatus[waterLevel]);
                 tvLubaoWL.setBackgroundResource(floodColorCode[waterLevel]);
                 break;
-
         }
+        EZSharedPreferences.setWaterLevel(getActivity(), mapCombination);
+
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -260,7 +321,6 @@ public class MapFragment extends Fragment {
                 });
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -268,10 +328,18 @@ public class MapFragment extends Fragment {
         getActivity().unregisterReceiver(mReceiver);
     }
 
-    private void getCurrentTime() {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+    }
+
+    private String getCurrentTime() {
         Calendar c = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("h:mm a");
+        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a yyyy-MM-dd", Locale.ENGLISH);
         String time = sdf.format(c.getTime());
         Log.d(TAG, time);
+
+        return time;
     }
 }
