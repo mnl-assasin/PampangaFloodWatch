@@ -1,13 +1,194 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dhvtsu.pampangafloodwatch.fragment.MunicipalityFragment">
+    android:background="#fff"
+    android:orientation="vertical"
+    tools:context=".fragment.MapFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--TODO: Update blank fragment layout-->
+    <com.dhvtsu.pampangafloodwatch.widgets.TouchImageView
+        android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:src="@drawable/pampanga000" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/txtMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/hello_blank_fragment"
+        android:textSize="32sp"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/colorPrimaryDark"
+        android:orientation="vertical"
+        android:padding="2dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/textColorPrimary"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="1dp">
+
+            <TextView
+                android:id="@+id/tvArea"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:gravity="center"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:text="AREA"
+                android:textAppearance="?android:textAppearanceMedium"
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/textColorPrimary"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="1dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="1dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="16dp"
+                android:text="SMS Gateway"
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvGateway"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text="+639XX-XXX-XXXX"
+                android:textAlignment="center"
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/textColorPrimary"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="1dp">
+
+            <TextView
+                android:id="@+id/tvArea1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="1dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="16dp"
+                android:text=""
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvArea1Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/textColorPrimary"
+            android:paddingLeft="1dp"
+            android:paddingRight="1dp"
+            android:paddingTop="1dp">
+
+            <TextView
+                android:id="@+id/tvArea2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="1dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="16dp"
+                android:text=""
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvArea2Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/textColorPrimary"
+            android:padding="1dp">
+
+            <TextView
+                android:id="@+id/tvArea3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"
+                android:text=""
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvArea3Status"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/colorPrimary"
+                android:text=""
+                android:textAlignment="center"
+                android:textColor="@color/textColorPrimary"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

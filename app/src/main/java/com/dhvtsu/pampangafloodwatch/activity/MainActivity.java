@@ -16,8 +16,8 @@ import android.widget.TextView;
 import com.dhvtsu.pampangafloodwatch.R;
 import com.dhvtsu.pampangafloodwatch.builder.DialogBuilder;
 import com.dhvtsu.pampangafloodwatch.fragment.HistoryFragment;
-import com.dhvtsu.pampangafloodwatch.fragment.MapFragment;
 import com.dhvtsu.pampangafloodwatch.fragment.MunicipalityFragment;
+import com.dhvtsu.pampangafloodwatch.fragment.WeatherFragment;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -66,8 +66,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void setupInitialView() {
         FragmentTransaction mFragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mFragmentTransaction.replace(R.id.fragmentFrame, new MapFragment()).commit();
-        setTitle(getString(R.string.drawer_map));
+        mFragmentTransaction.replace(R.id.fragmentFrame, new MunicipalityFragment()).commit();
+        setTitle(getString(R.string.drawer_municipalities));
     }
 
     private void setupNavigationview() {
@@ -113,15 +113,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
         switch (item.getItemId()) {
-            case R.id.map:
-                mFragment = new MapFragment();
-                title = getString(R.string.drawer_map);
-                break;
+
             case R.id.municipalities:
                 mFragment = new MunicipalityFragment();
                 break;
             case R.id.floodHistory:
                 mFragment = new HistoryFragment();
+                break;
+            case R.id.onlineWeather:
+                mFragment = new WeatherFragment();
+                title = getString(R.string.drawer_weather);
                 break;
             case R.id.about:
                 break;

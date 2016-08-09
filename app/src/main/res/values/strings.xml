@@ -9,7 +9,7 @@
     <string name="app_exit">Do you really want to exit?</string>
 
     <!-- DRAWER STRINGS -->
-    <string name="drawer_map">Pampanga Map</string>
+    <string name="drawer_weather">Online Weather</string>
     <string name="drawer_municipalities">Municipalities</string>
     <string name="drawer_floodhistory">Flood History</string>
     <string name="drawer_about">About</string>

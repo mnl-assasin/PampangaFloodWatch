@@ -5,13 +5,8 @@
         android:id="@+id/group1"
         android:checkableBehavior="single">
         <item
-            android:id="@+id/map"
-            android:checked="true"
-            android:title="@string/drawer_map" />
-
-        <item
             android:id="@+id/municipalities"
-            android:checked="false"
+            android:checked="true"
             android:title="@string/drawer_municipalities" />
 
         <item
@@ -19,6 +14,10 @@
             android:checked="false"
             android:title="@string/drawer_floodhistory" />
 
+        <item
+            android:id="@+id/onlineWeather"
+            android:checked="false"
+            android:title="@string/drawer_weather" />
         <item
             android:id="@+id/about"
             android:checked="false"
