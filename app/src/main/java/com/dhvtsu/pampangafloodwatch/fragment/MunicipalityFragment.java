@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -101,12 +102,12 @@ public class MunicipalityFragment extends Fragment {
 
 
         //TEST DATA
-        int x[] = {1, 1, 2};
-        EZSharedPreferences.setBacolorLevel(getActivity(), x);
-        int y[] = {2, 2, 3};
-        EZSharedPreferences.setFLoridaLevel(getActivity(), y);
-        int z[] = {0, 3, 3};
-        EZSharedPreferences.setLubaoLevel(getActivity(), z);
+//        int x[] = {1, 1, 2};
+//        EZSharedPreferences.setBacolorLevel(getActivity(), x);
+//        int y[] = {2, 2, 3};
+//        EZSharedPreferences.setFLoridaLevel(getActivity(), y);
+//        int z[] = {0, 3, 3};
+//        EZSharedPreferences.setLubaoLevel(getActivity(), z);
         initData();
 
         return v;
@@ -114,6 +115,7 @@ public class MunicipalityFragment extends Fragment {
 
     private void initData() {
         setHasOptionsMenu(true);
+        dbHelper = DatabaseHelper.getInstance(getActivity());
         initGateway();
         initSMSReceiver();
         initMap();
@@ -148,28 +150,49 @@ public class MunicipalityFragment extends Fragment {
     private void onSMSReceived(String sender, String message) {
         int waterLevel = -1;
         int area = -1;
-        if (sender.equals(SMS_GATEWAY)) {
+        String key = "";
+//        if (sender.equals(SMS_GATEWAY)) {
+        if (true) {
             //BACOLOR AREA
-            if (message.contains(Municipality.BRGY_CABALANTIAN))
+            if (message.contains(Municipality.BRGY_CABALANTIAN)) {
                 area = Municipality.AREA_CABALANTIAN;
-            else if (message.contains(Municipality.BRGY_CABETICAN))
+                key = EZSharedPreferences.BRGY_CABALANTIAN;
+
+            } else if (message.contains(Municipality.BRGY_CABETICAN)) {
                 area = Municipality.AREA_CABETICAN;
-            else if (message.contains(Municipality.BRGY_SAN_VICENTE))
+                key = EZSharedPreferences.BRGY_CABETICAN;
+
+            } else if (message.contains(Municipality.BRGY_SAN_VICENTE)) {
                 area = Municipality.AREA_SAN_VICENTE;
-                //FLORIDA
-            else if (message.contains(Municipality.BRGY_PAGUIRUAN))
+                key = EZSharedPreferences.BRGY_SAN_VICENTE;
+            }
+            //FLORIDA
+            else if (message.contains(Municipality.BRGY_PAGUIRUAN)) {
                 area = Municipality.AREA_PAGUIRUAN;
-            else if (message.contains(Municipality.BRGY_POBLACION))
+                key = EZSharedPreferences.BRGY_PAGUIRUAN;
+
+            } else if (message.contains(Municipality.BRGY_POBLACION)) {
                 area = Municipality.AREA_POBLACION;
-            else if (message.contains(Municipality.BRGY_SOLIB))
+                key = EZSharedPreferences.BRGY_POBLACION;
+
+            } else if (message.contains(Municipality.BRGY_SOLIB)) {
                 area = Municipality.AREA_SOLIB;
-                // LUBAO
-            else if (message.contains(Municipality.BRGY_SAN_ISIDRO))
+                key = EZSharedPreferences.BRGY_SOLIB;
+
+            }
+            // LUBAO
+            else if (message.contains(Municipality.BRGY_SAN_ISIDRO)) {
                 area = Municipality.AREA_SAN_ISIDRO;
-            else if (message.contains(Municipality.BRGY_SAN_ROQUE))
+                key = EZSharedPreferences.BRGY_SAN_ISIDRO;
+
+            } else if (message.contains(Municipality.BRGY_SAN_ROQUE)) {
                 area = Municipality.AREA_SAN_ROQUE;
-            else if (message.contains(Municipality.BRGY_STA_CRUZ))
+                key = EZSharedPreferences.BRGY_SAN_ROQUE;
+
+            } else if (message.contains(Municipality.BRGY_STA_CRUZ)) {
                 area = Municipality.AREA_STA_CRUZ;
+                key = EZSharedPreferences.BRGY_STA_CRUZ;
+            }
 
             if (message.contains(Flood.RED)) {
                 waterLevel = Flood.HIGH;
@@ -184,7 +207,10 @@ public class MunicipalityFragment extends Fragment {
 
             if (area != -1 && waterLevel != -1) {
                 addDB(area, waterLevel);
-                updateWaterLevel(area, waterLevel);
+//                updateWaterLevel(key, waterLevel);
+                Log.d(TAG, "TEXT: " + key + " LEVEL: " + waterLevel);
+                EZSharedPreferences.setWaterLevel(getActivity(), key, waterLevel);
+                displayMap(lastArea);
             }
         }
     }
@@ -251,6 +277,98 @@ public class MunicipalityFragment extends Fragment {
         }
     }
 
+    private void modifyText(int lastArea) {
+        int area = lastArea / 4;
+        int position = lastArea % 4;
+        Log.d(TAG, "LastArea: " + lastArea + " Area: " + area + " Position: " + position);
+        tvArea.setText(this.area[area][position]);
+//        int lastArea = area * 4 + position;
+        if (lastArea % 4 != 0) {
+            tvArea1.setVisibility(View.GONE);
+            tvArea1Status.setVisibility(View.GONE);
+            tvArea2.setVisibility(View.GONE);
+            tvArea2Status.setVisibility(View.GONE);
+            tvArea3.setVisibility(View.GONE);
+            tvArea3Status.setVisibility(View.GONE);
+        } else {
+            tvArea1.setVisibility(View.VISIBLE);
+            tvArea1Status.setVisibility(View.VISIBLE);
+            tvArea2.setVisibility(View.VISIBLE);
+            tvArea2Status.setVisibility(View.VISIBLE);
+            tvArea3.setVisibility(View.VISIBLE);
+            tvArea3Status.setVisibility(View.VISIBLE);
+        }
+    }
+
+    /**
+     * 0 - Bacolor
+     * 1 - Florida Blanca
+     * 2 - Lubao
+     */
+    private void displayAllMap(int lastArea) {
+        int area = lastArea / 4;
+        Log.d(TAG, "Display All Map area: " + area);
+
+        switch (area) {
+            case 0: // Bacolor
+                tvArea1.setText(Municipality.BRGY_CABALANTIAN);
+                tvArea2.setText(Municipality.BRGY_CABETICAN);
+                tvArea3.setText(Municipality.BRGY_SAN_VICENTE);
+                break;
+            case 1: // Florida Blanca
+                tvArea1.setText(Municipality.BRGY_PAGUIRUAN);
+                tvArea2.setText(Municipality.BRGY_POBLACION);
+                tvArea3.setText(Municipality.BRGY_SOLIB);
+                break;
+            case 2: // Lubao
+                tvArea1.setText(Municipality.BRGY_SAN_ISIDRO);
+                tvArea2.setText(Municipality.BRGY_SAN_ROQUE);
+                tvArea3.setText(Municipality.BRGY_STA_CRUZ);
+                break;
+        }
+        updateAllMap(area);
+    }
+
+    private void updateAllMap(int area) {
+        int brgyLevel[] = new int[3];
+        Drawable d = null;
+        switch (area) {
+            case 0:
+                brgyLevel = EZSharedPreferences.getBacolorLevel(getActivity());
+                //change map image to that.
+//                d = getActivity().getResources().getDrawable();
+                break;
+            case 1:
+                brgyLevel = EZSharedPreferences.getFloridaLevel(getActivity());
+                break;
+            case 2:
+                brgyLevel = EZSharedPreferences.getLubaoLevel(getActivity());
+                break;
+        }
+
+        if (brgyLevel != null) {
+//            Log.d(TAG, "CABALANTIAN: " + brgyLevel[0] + " CABETICAN: " + brgyLevel[1] + " SAN VICENTE: " + brgyLevel[2]);
+            tvArea1Status.setText(floodStatus[brgyLevel[0]]);
+            tvArea2Status.setText(floodStatus[brgyLevel[1]]);
+            tvArea3Status.setText(floodStatus[brgyLevel[2]]);
+
+            tvArea1Status.setBackgroundResource(floodColorCode[brgyLevel[0]]);
+            tvArea2Status.setBackgroundResource(floodColorCode[brgyLevel[1]]);
+            tvArea3Status.setBackgroundResource(floodColorCode[brgyLevel[2]]);
+        }
+
+
+        map.setImageDrawable(d);
+
+
+    }
+
+    private void displayIndividualMap(int lastArea) {
+        int area = lastArea;
+        Log.d(TAG, "Display Individual Map area: " + area);
+    }
+
+
     private AlertDialog dialogBuilder(String title, View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title);
@@ -308,10 +426,6 @@ public class MunicipalityFragment extends Fragment {
 //        readDB();
     }
 
-    private void updateWaterLevel(int area, int waterLevel) {
-
-    }
-
     private String getCurrentTime() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a yyyy-MM-dd", Locale.ENGLISH);
@@ -321,90 +435,6 @@ public class MunicipalityFragment extends Fragment {
         return time;
     }
 
-    private void modifyText(int lastArea) {
-        int area = lastArea / 4;
-        int position = lastArea % 4;
-        Log.d(TAG, "LastArea: " + lastArea + " Area: " + area + " Position: " + position);
-        tvArea.setText(this.area[area][position]);
-//        int lastArea = area * 4 + position;
-        if (lastArea % 4 != 0) {
-            tvArea1.setVisibility(View.GONE);
-            tvArea1Status.setVisibility(View.GONE);
-            tvArea2.setVisibility(View.GONE);
-            tvArea2Status.setVisibility(View.GONE);
-            tvArea3.setVisibility(View.GONE);
-            tvArea3Status.setVisibility(View.GONE);
-        } else {
-            tvArea1.setVisibility(View.VISIBLE);
-            tvArea1Status.setVisibility(View.VISIBLE);
-            tvArea2.setVisibility(View.VISIBLE);
-            tvArea2Status.setVisibility(View.VISIBLE);
-            tvArea3.setVisibility(View.VISIBLE);
-            tvArea3Status.setVisibility(View.VISIBLE);
-        }
-    }
-
-    /**
-     * 0 - Bacolor
-     * 1 - Florida Blanca
-     * 2 - Lubao
-     */
-    private void displayAllMap(int lastArea) {
-        int area = lastArea / 4;
-        Log.d(TAG, "Display All Map area: " + area);
-
-        switch (area) {
-            case 0: // Bacolor
-                tvArea1.setText(Municipality.BRGY_CABALANTIAN);
-                tvArea2.setText(Municipality.BRGY_CABETICAN);
-                tvArea3.setText(Municipality.BRGY_SAN_VICENTE);
-                break;
-            case 1: // Florida Blanca
-                tvArea1.setText(Municipality.BRGY_PAGUIRUAN);
-                tvArea2.setText(Municipality.BRGY_POBLACION);
-                tvArea3.setText(Municipality.BRGY_SOLIB);
-                break;
-            case 2: // Lubao
-                tvArea1.setText(Municipality.BRGY_SAN_ISIDRO);
-                tvArea2.setText(Municipality.BRGY_SAN_ROQUE);
-                tvArea3.setText(Municipality.BRGY_STA_CRUZ);
-                break;
-        }
-        updateAllMap(area);
-    }
-
-    private void updateAllMap(int area) {
-        int brgyLevel[] = new int[3];
-        switch (area) {
-            case 0:
-                brgyLevel = EZSharedPreferences.getBacolorLevel(getActivity());
-                break;
-            case 1:
-                brgyLevel = EZSharedPreferences.getFloridaLevel(getActivity());
-                break;
-            case 2:
-                brgyLevel = EZSharedPreferences.getLubaoLevel(getActivity());
-                break;
-        }
-
-        if (brgyLevel != null) {
-//            Log.d(TAG, "CABALANTIAN: " + brgyLevel[0] + " CABETICAN: " + brgyLevel[1] + " SAN VICENTE: " + brgyLevel[2]);
-            tvArea1Status.setText(floodStatus[brgyLevel[0]]);
-            tvArea2Status.setText(floodStatus[brgyLevel[1]]);
-            tvArea3Status.setText(floodStatus[brgyLevel[2]]);
-
-            tvArea1Status.setBackgroundResource(floodColorCode[brgyLevel[0]]);
-            tvArea2Status.setBackgroundResource(floodColorCode[brgyLevel[1]]);
-            tvArea3Status.setBackgroundResource(floodColorCode[brgyLevel[2]]);
-        }
-
-
-    }
-
-    private void displayIndividualMap(int lastArea) {
-        int area = lastArea;
-        Log.d(TAG, "Display Individual Map area: " + area);
-    }
 
     @Override
     public void onDestroyView() {

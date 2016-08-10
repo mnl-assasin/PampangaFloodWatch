@@ -139,6 +139,12 @@ public class EZSharedPreferences {
         editor.apply();
     }
 
+    public static void setWaterLevel(Context ctx, String key, int level) {
+        SharedPreferences.Editor editor = getSharedPref(ctx).edit();
+        editor.putInt(key, level);
+        editor.apply();
+    }
+
     public static void setLastArea(Context ctx, int area) {
         SharedPreferences.Editor editor = getSharedPref(ctx).edit();
         editor.putInt(KEY_LAST_AREA, area);
