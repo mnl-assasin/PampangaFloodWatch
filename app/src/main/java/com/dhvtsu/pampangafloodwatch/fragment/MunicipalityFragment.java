@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
@@ -28,6 +27,7 @@ import com.dhvtsu.pampangafloodwatch.builder.DialogBuilder;
 import com.dhvtsu.pampangafloodwatch.data.DatabaseHelper;
 import com.dhvtsu.pampangafloodwatch.data.EZSharedPreferences;
 import com.dhvtsu.pampangafloodwatch.data.Flood;
+import com.dhvtsu.pampangafloodwatch.data.MapTiles;
 import com.dhvtsu.pampangafloodwatch.data.Municipality;
 import com.dhvtsu.pampangafloodwatch.service.SmsReceiver;
 import com.dhvtsu.pampangafloodwatch.utils.LogUtil;
@@ -125,6 +125,13 @@ public class MunicipalityFragment extends Fragment {
     private void initGateway() {
         SMS_GATEWAY = EZSharedPreferences.getGateway(getActivity());
         tvGateway.setText(SMS_GATEWAY);
+        tvGateway.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setGateway();
+
+            }
+        });
         if (SMS_GATEWAY.equals(""))
             setGateway();
     }
@@ -151,8 +158,9 @@ public class MunicipalityFragment extends Fragment {
         int waterLevel = -1;
         int area = -1;
         String key = "";
-//        if (sender.equals(SMS_GATEWAY)) {
-        if (true) {
+        Log.d(TAG, message);
+        if (sender.equals(SMS_GATEWAY)) {
+//        if (true) {
             //BACOLOR AREA
             if (message.contains(Municipality.BRGY_CABALANTIAN)) {
                 area = Municipality.AREA_CABALANTIAN;
@@ -331,15 +339,15 @@ public class MunicipalityFragment extends Fragment {
 
     private void updateAllMap(int area) {
         int brgyLevel[] = new int[3];
-        Drawable d = null;
+        int resId = -1;
         switch (area) {
             case 0:
                 brgyLevel = EZSharedPreferences.getBacolorLevel(getActivity());
-                //change map image to that.
-//                d = getActivity().getResources().getDrawable();
+                resId = MapTiles.allBacolor[brgyLevel[0]][brgyLevel[1]][brgyLevel[2]];
                 break;
             case 1:
                 brgyLevel = EZSharedPreferences.getFloridaLevel(getActivity());
+                resId = MapTiles.allFlorida[brgyLevel[0]][brgyLevel[1]][brgyLevel[2]];
                 break;
             case 2:
                 brgyLevel = EZSharedPreferences.getLubaoLevel(getActivity());
@@ -357,15 +365,51 @@ public class MunicipalityFragment extends Fragment {
             tvArea3Status.setBackgroundResource(floodColorCode[brgyLevel[2]]);
         }
 
+        if (resId != -1) {
+            setDisplayMap(resId);
+        }
 
-        map.setImageDrawable(d);
+    }
 
-
+    private void setDisplayMap(int resId) {
+        map.setImageResource(resId);
     }
 
     private void displayIndividualMap(int lastArea) {
         int area = lastArea;
         Log.d(TAG, "Display Individual Map area: " + area);
+        int lastLevel = 0;
+        int resId = -1;
+        switch (area) {
+            case Municipality.AREA_CABALANTIAN:
+                lastLevel = EZSharedPreferences.getWaterLevel(getActivity(), EZSharedPreferences.BRGY_CABALANTIAN);
+                resId = MapTiles.cabalantian[lastLevel];
+                break;
+            case Municipality.AREA_CABETICAN:
+                lastLevel = EZSharedPreferences.getWaterLevel(getActivity(), EZSharedPreferences.BRGY_CABETICAN);
+                resId = MapTiles.cabetican[lastLevel];
+                break;
+            case Municipality.AREA_SAN_VICENTE:
+                lastLevel = EZSharedPreferences.getWaterLevel(getActivity(), EZSharedPreferences.BRGY_SAN_VICENTE);
+                resId = MapTiles.vicente[lastLevel];
+                break;
+            // ############
+            case Municipality.AREA_PAGUIRUAN:
+                lastLevel = EZSharedPreferences.getWaterLevel(getActivity(), EZSharedPreferences.BRGY_PAGUIRUAN);
+                resId = MapTiles.paguiruan[lastLevel];
+                break;
+            case Municipality.AREA_POBLACION:
+                lastLevel = EZSharedPreferences.getWaterLevel(getActivity(), EZSharedPreferences.BRGY_POBLACION);
+                resId = MapTiles.poblacion[lastLevel];
+                break;
+            case Municipality.AREA_SOLIB:
+                lastLevel = EZSharedPreferences.getWaterLevel(getActivity(), EZSharedPreferences.BRGY_SOLIB);
+                resId = MapTiles.solib[lastLevel];
+                break;
+        }
+        if (lastLevel != -1) {
+            setDisplayMap(resId);
+        }
     }
 
 

@@ -19,8 +19,10 @@ public class EZSharedPreferences {
     public static final String KEY_LAST_LUBAO = "last lubao";
     public static final String KEY_LAST_AREA = "last area";
 
-    public static final String BRGY_CABALANTIAN = "Cabalantian";
-    public static final String BRGY_CABETICAN = "Cabetican";
+    public static final String BRGY_CABALANTIAN = "Cabetican";
+    public static final String BRGY_CABETICAN = "Cabalantian";
+    //    public static final String BRGY_CABALANTIAN = "Cabalantian";
+//    public static final String BRGY_CABETICAN = "Cabetican";
     public static final String BRGY_SAN_VICENTE = "San Vicente";
 
     public static final String BRGY_PAGUIRUAN = "Paguiruan";
@@ -81,6 +83,10 @@ public class EZSharedPreferences {
         map[1] = getSharedPref(ctx).getInt(BRGY_SAN_ROQUE, 0);
         map[2] = getSharedPref(ctx).getInt(BRGY_STA_CRUZ, 0);
         return map;
+    }
+
+    public static int getWaterLevel(Context ctx, String KEY) {
+        return getSharedPref(ctx).getInt(KEY, 0);
     }
 
     public static int getLastArea(Context ctx) {

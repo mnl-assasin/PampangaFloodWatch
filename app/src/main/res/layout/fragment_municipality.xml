@@ -10,8 +10,7 @@
     <com.dhvtsu.pampangafloodwatch.widgets.TouchImageView
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/pampanga000" />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/txtMap"
